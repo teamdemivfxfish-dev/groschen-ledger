@@ -35,7 +35,7 @@ body{margin:0;color:var(--ink);font:17px/1.55 var(--f-body);overflow-x:clip;
   background-color:var(--night);
   background-image:radial-gradient(ellipse 70% 40% at 50% 0%,rgba(201,140,60,.10),transparent 70%),linear-gradient(rgba(16,12,10,.94),rgba(16,12,10,.94)),var(--tex);
   background-size:auto,auto,845px auto}
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;box-shadow:inset 0 0 160px rgba(0,0,0,.55)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;background:radial-gradient(ellipse at center,transparent 62%,rgba(0,0,0,.5) 100%);will-change:transform}
 a{color:var(--brass)}
 ::selection{background:var(--sel);color:var(--ink)}
 :focus-visible{outline:2px solid var(--brass);outline-offset:2px}
@@ -82,7 +82,10 @@ main.wrap{padding-block:26px 60px;display:grid;gap:22px}
 .scroll.open>.roll{height:auto}
 .sheet{position:relative;margin:0 4px;
   background-color:var(--vellum);background-image:linear-gradient(rgba(28,22,17,.9),rgba(28,22,17,.9)),var(--tex);background-size:auto,845px auto;
-  box-shadow:inset 0 16px 16px -12px rgba(0,0,0,.75),inset 0 -16px 16px -12px rgba(0,0,0,.75),inset 12px 0 20px -16px rgba(0,0,0,.7),inset -12px 0 20px -16px rgba(0,0,0,.7)}
+  border-left:1px solid rgba(0,0,0,.45);border-right:1px solid rgba(0,0,0,.45)}
+.sheet::before,.sheet::after{content:"";position:absolute;left:0;right:0;height:18px;pointer-events:none}
+.sheet::before{top:0;background:linear-gradient(rgba(0,0,0,.6),transparent)}
+.sheet::after{bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.6))}
 .sheet-in{padding:20px 24px 24px}
 .scroll.small .rod{height:12px;margin:0 -6px}
 .scroll.small .rod::before,.scroll.small .rod::after{width:11px;height:18px;top:-3px}
@@ -124,7 +127,7 @@ input[type=number]:focus{border-color:var(--brass);outline:none;box-shadow:0 0 0
 
 /* search */
 .searchbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;padding-block:10px;display:grid;gap:8px;
-  background-color:rgba(16,12,10,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  background-color:rgba(16,12,10,.97);
   box-shadow:0 12px 14px -12px rgba(0,0,0,.8);margin-inline:-8px;padding-inline:8px;border-bottom:1px solid var(--line)}
 .search{position:relative}
 .search input{width:100%;font:400 1.2rem var(--f-display);color:var(--ink);padding:12px 16px 12px 46px;border:1px solid var(--line-hi);border-bottom:2px solid var(--gold);border-radius:3px;background:var(--input)}
@@ -139,11 +142,11 @@ input[type=number]:focus{border-color:var(--brass);outline:none;box-shadow:0 0 0
 
 /* catalogue */
 .catalogue{display:grid;gap:26px}
-.lvl{font:400 1.05rem var(--f-caps);letter-spacing:.08em;color:var(--gold);display:flex;align-items:center;gap:10px;margin:18px 0 4px}
+.lvl{content-visibility:auto;contain-intrinsic-size:auto 40px;font:400 1.05rem var(--f-caps);letter-spacing:.08em;color:var(--gold);display:flex;align-items:center;gap:10px;margin:18px 0 4px}
 .lvl:first-child{margin-top:0}
 .lvl::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line-hi),transparent)}
 .lvl small{font:500 .72rem var(--f-num);color:var(--ink-faint);letter-spacing:0}
-.item{display:grid;grid-template-columns:auto minmax(0,auto) minmax(20px,1fr) auto;gap:12px;align-items:center;padding:6px 6px;border-radius:3px;cursor:pointer}
+.item{content-visibility:auto;contain-intrinsic-size:auto 52px;display:grid;grid-template-columns:auto minmax(0,auto) minmax(20px,1fr) auto;gap:12px;align-items:center;padding:6px 6px;border-radius:3px;cursor:pointer}
 .item:hover,.item[aria-expanded=true]{background:var(--card-hi)}
 .item[aria-expanded=true]{box-shadow:inset 2px 0 0 var(--brass)}
 .item .nm{font-weight:500;line-height:1.2}
@@ -161,7 +164,6 @@ input[type=number]:focus{border-color:var(--brass);outline:none;box-shadow:0 0 0
 /* icons: inventory slots */
 .ico{--s:40px;width:var(--s);height:var(--s);flex:none;display:inline-grid;place-items:center;border-radius:4px;background-color:var(--tile);background-image:radial-gradient(circle at 50% 38%,rgba(255,220,160,.09),transparent 70%);box-shadow:inset 0 0 0 1px rgba(201,162,74,.32),0 1px 3px rgba(0,0,0,.5);color:var(--tile-ink)}
 .ico i{width:100%;height:100%;background-image:url(assets/icons.webp?v=7b5047df94);background-repeat:no-repeat;background-size:calc(var(--s)*32) auto;background-position:calc(var(--s)*var(--x)*-1) calc(var(--s)*var(--y)*-1)}
-.ico.decor i{background-image:url(assets/decor.webp?v=07e4e4cf9e);background-size:calc(var(--s)*16) auto}
 .ico svg{width:60%;height:60%;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 
 /* breakdown slip */
@@ -211,6 +213,8 @@ h3{font:400 1.15rem var(--f-caps);letter-spacing:.05em;color:var(--gold);margin:
 footer{color:var(--ink-faint);font-size:.85rem;text-align:center;padding-bottom:40px}
 footer p{max-width:80ch;margin:6px auto}
 @media (max-width:600px){.label{grid-template-columns:auto minmax(0,1fr)}.label .cue{grid-column:1/-1}.label .mini{width:58px;height:58px}.sheet-in{padding:16px 14px 18px}.ing{grid-template-columns:auto minmax(0,1fr)}.ing .dot{display:none}.ing-val{grid-column:1/-1;grid-template-columns:auto auto auto;justify-content:end;align-items:center}.dcost{margin-left:0;text-align:left}}
+
+.ico.decor i{background-image:url(assets/decor.webp?v=07e4e4cf9e);background-size:calc(var(--s)*16) auto}
 </style>
 </head>
 <body>
@@ -572,14 +576,14 @@ function unroll(scroll, open, done) {
   if (label) { label.setAttribute("aria-expanded", open); const c = label.querySelector(".cuetext"); if (c) c.textContent = open ? "Roll up" : "Unroll"; }
   roll.inert = !open;
   if (reduceMotion() || !roll.animate) { roll.style.height = open ? "" : "0px"; done && done(); return; }
-  const dur = open ? Math.min(1100, 420 + h * 0.35) : Math.min(650, 260 + h * 0.15);
+  // only the part that can be seen is unrolled frame by frame; a long list then opens the rest at once,
+  // so a 400-row craft costs no more to animate than a short one
+  const span = Math.min(h, Math.round(window.innerHeight * 0.9));
+  const dur = open ? 380 + span * 0.32 : 240 + span * 0.18;
   scroll.classList.add("rolling");
-  roll.style.height = open ? "0px" : h + "px";
-  const a = roll.animate([{ height: (open ? 0 : h) + "px" }, { height: (open ? h : 0) + "px" }],
+  roll.style.height = (open ? 0 : span) + "px";
+  const a = roll.animate([{ height: (open ? 0 : span) + "px" }, { height: (open ? span : 0) + "px" }],
     { duration: dur, easing: open ? "cubic-bezier(.22,.9,.3,1)" : "cubic-bezier(.6,0,.8,.4)" });
-  sheet.animate(open
-    ? [{ transform: "translateY(-18px)", filter: "brightness(.82)" }, { transform: "none", filter: "none" }]
-    : [{ transform: "none" }, { transform: "translateY(-18px)", filter: "brightness(.82)" }], { duration: dur, easing: "ease-out" });
   a.onfinish = () => { roll.style.height = open ? "" : "0px"; scroll.classList.remove("rolling"); done && done(); };
 }
 function setStatic(scroll, open) {
@@ -668,19 +672,18 @@ function itemRow(r) {
     <div><div class="nm">${esc(r.n)}</div>${sub ? `<div class="sub">${esc(sub)}</div>` : ""}</div><span class="lead"></span><div class="val">${val}</div></div>`
     + (open ? slipHTML(r) : "");
 }
-function tradeBody(t, list) {
-  let body = "";
-  const lim = ui.limit[t] || 500, shown = list.slice(0, lim);
-  if (ui.sort === "lv") {
-    let lv = null;
-    for (const r of shown) {
-      if (r.l !== lv) { lv = r.l; body += `<div class="lvl">Level ${["I","II","III","IV","V","VI","VII","VIII","IX","X"][lv - 1]} <small>${list.filter(x => x.l === lv).length}</small></div>`; }
-      body += itemRow(r);
-    }
-  } else body = shown.map(itemRow).join("");
-  if (list.length > lim) body += `<div class="more"><button class="btn ghost" data-more="${esc(t)}">Show all ${list.length}</button></div>`;
-  return body;
+// the rows of one craft as separate pieces (level headings included), so they can be written a few at a time
+function tradeParts(t, list) {
+  const parts = [], lim = ui.limit[t] || 500, shown = list.slice(0, lim);
+  let lv = null;
+  for (const r of shown) {
+    if (ui.sort === "lv" && r.l !== lv) { lv = r.l; parts.push(`<div class="lvl">Level ${["I","II","III","IV","V","VI","VII","VIII","IX","X"][lv - 1]} <small>${list.filter(x => x.l === lv).length}</small></div>`); }
+    parts.push(itemRow(r));
+  }
+  if (list.length > lim) parts.push(`<div class="more"><button class="btn ghost" data-more="${esc(t)}">Show all ${list.length}</button></div>`);
+  return parts;
 }
+const tradeBody = (t, list) => tradeParts(t, list).join("");
 function renderCatalogue() {
   const q = K($("q").value);
   let html = ""; const counts = {};
@@ -708,10 +711,19 @@ function toggleTrade(t, scrollTo) {
   const opening = !sec.classList.contains("open");
   if (opening) {
     const list = sorted(R.filter(r => r.t === t && matches(r, q)));
-    sec.querySelector(".sheet-in").innerHTML = tradeBody(t, list);
+    // the first rows are enough to fill the unrolling sheet; the rest are written once it stands open
+    const FIRST = 40, CHUNK = 40, inner = sec.querySelector(".sheet-in"), parts = tradeParts(t, list);
+    inner.innerHTML = parts.slice(0, FIRST).join("");
     if (!q) { ui.openTrades.add(t); saveUI(); }
     if (scrollTo) sec.scrollIntoView({ block: "start", behavior: reduceMotion() ? "auto" : "smooth" });
-    unroll(sec, true);
+    unroll(sec, true, () => {
+      let at = FIRST;
+      (function more() {
+        if (at >= parts.length || !sec.classList.contains("open")) return;
+        inner.insertAdjacentHTML("beforeend", parts.slice(at, at += CHUNK).join(""));
+        requestAnimationFrame(more);
+      })();
+    });
   } else {
     if (!q) { ui.openTrades.delete(t); saveUI(); }
     if (ui.openItem != null && R[ui.openItem].t === t) ui.openItem = null;

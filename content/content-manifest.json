@@ -1,9 +1,9 @@
 {
  "app": "groschen-ledger",
- "version": "2026.10.23.1",
+ "version": "2026.10.23.2",
  "minApp": "1.0.0",
- "tag": "data-2026.10.23.1",
- "notes": "Recipes from the KCD Roleplay wiki, 23 Oct 2026",
+ "tag": "data-2026.10.23.2",
+ "notes": "Smoother unrolling and scrolling, matching item icons",
  "files": [
   {
    "path": "assets/decor.webp",
@@ -98,7 +98,7 @@
   {
    "path": "index.html",
    "asset": "index.html",
-   "sha256": "23f8250277de125f415ba5c89c700bf404cd78b60452d88a0c0353eb279b3de1"
+   "sha256": "aa8013e260d9f827899dfb650d4646aa0f1f9db202a096fb7121f3dd4b411c21"
   }
  ]
 }

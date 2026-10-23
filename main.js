@@ -44,7 +44,7 @@ function createWindow() {
     width: 1280, height: 900, minWidth: 420, minHeight: 500,
     backgroundColor: '#100c0a', title: 'Groschen Ledger', autoHideMenuBar: true,
     icon: path.join(__dirname, 'build', 'icon.ico'),
-    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, sandbox: true },
+    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, sandbox: true, backgroundThrottling: !process.env.LEDGER_SNAPSHOT },
   });
   Menu.setApplicationMenu(null);
   // links to other sites (the wiki) open in the browser, never inside the app
@@ -56,6 +56,7 @@ function createWindow() {
   // test mode: LEDGER_SNAPSHOT=<file.png> saves what the window shows and quits
   if (process.env.LEDGER_SNAPSHOT) win.webContents.once('did-finish-load', () => setTimeout(async () => {
     if (process.env.LEDGER_HASH) await win.webContents.executeJavaScript(`location.hash = ${JSON.stringify(process.env.LEDGER_HASH)}`);
+    if (process.env.LEDGER_EVAL) tlog('eval:', await win.webContents.executeJavaScript(process.env.LEDGER_EVAL));
     if (process.env.LEDGER_CLICK) await win.webContents.executeJavaScript(`document.getElementById(${JSON.stringify(process.env.LEDGER_CLICK)})?.click()`);
     setTimeout(async () => { fs.writeFileSync(process.env.LEDGER_SNAPSHOT, (await win.webContents.capturePage()).toPNG()); app.quit(); }, 2500);
   }, 1500));
