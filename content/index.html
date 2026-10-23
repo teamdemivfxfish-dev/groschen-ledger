@@ -215,6 +215,37 @@ footer p{max-width:80ch;margin:6px auto}
 @media (max-width:600px){.label{grid-template-columns:auto minmax(0,1fr)}.label .cue{grid-column:1/-1}.label .mini{width:58px;height:58px}.sheet-in{padding:16px 14px 18px}.ing{grid-template-columns:auto minmax(0,1fr)}.ing .dot{display:none}.ing-val{grid-column:1/-1;grid-template-columns:auto auto auto;justify-content:end;align-items:center}.dcost{margin-left:0;text-align:left}}
 
 .ico.decor i{background-image:url(assets/decor.webp?v=07e4e4cf9e);background-size:calc(var(--s)*16) auto}
+
+/* the crafting window, as in the game */
+.craft{border:1px solid var(--line-hi);border-radius:4px;background:linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.18));padding:14px 16px;margin-bottom:14px}
+.chead{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.chead>.ico{--s:64px;border-radius:5px;box-shadow:inset 0 0 0 1px rgba(201,162,74,.55)}
+.cmain{min-width:0;flex:1}
+.cname{font:400 1.75rem/1.05 var(--f-display);color:var(--brass)}
+.ctags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.ctag{font:500 .78rem var(--f-body);color:var(--ink-soft);border:1px solid var(--line-hi);border-radius:3px;padding:1px 8px;background:rgba(0,0,0,.25)}
+.ctag.lv{color:var(--brass);border-color:#6a5436}
+.ccost{text-align:right;font:500 1.7rem/1 var(--f-num);color:var(--brass)}
+.ccost small,.ctotal small{display:block;font:italic 400 .82rem var(--f-display);color:var(--ink-soft);margin-top:3px}
+.rtitle{font:400 .9rem var(--f-caps);letter-spacing:.14em;color:var(--ink-soft);margin:14px 0 8px;display:flex;align-items:center;gap:10px}
+.rtitle::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line-hi),transparent)}
+.reagents{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:6px}
+.rg{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;padding:5px 8px 5px 5px;border:1px solid var(--line);border-radius:3px;background:rgba(0,0,0,.25)}
+.rg .ico{--s:34px}
+.rg-n{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rg-v{text-align:right;font-family:var(--f-num);line-height:1.15;white-space:nowrap}
+.rg-v b{display:block;font-weight:500;color:var(--ink);font-size:.9rem}
+.rg-v i{font-style:normal;font-size:.74rem;color:var(--brass)}
+.rg.part{border-left:2px solid #6a5436}
+.rg.miss{border-color:#7a3026;background:rgba(58,24,20,.4)}
+.cfoot{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.stepper{display:inline-flex;border:1px solid var(--line-hi);border-radius:3px;overflow:hidden}
+.stepper button{background:rgba(0,0,0,.3);color:var(--ink-soft);border:0;width:34px;font:500 1.1rem var(--f-num);cursor:pointer}
+.stepper button:hover{color:var(--brass);background:rgba(0,0,0,.45)}
+.stepper input{width:64px;border:0;border-left:1px solid var(--line-hi);border-right:1px solid var(--line-hi);border-radius:0;text-align:center}
+.cnote{font:italic 400 .95rem var(--f-display);color:var(--ink-soft);flex:1;min-width:180px}
+.ctotal{text-align:right;font:500 1.3rem/1 var(--f-num);color:var(--brass)}
+@media (max-width:600px){.ccost,.ctotal{text-align:left}.reagents{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -524,15 +555,28 @@ function detailHTML(r) {
   }).join("");
   const runs = Math.ceil(n / r.y);
   const usedHere = usedIn[K(r.n)] || [];
-  return `<div class="dhead">${ico(r.n, r.k)}<div><div class="dname">${esc(r.n)}</div>
-      <div class="dsub">${esc(r.t)} · level ${r.l} · at the ${esc(r.st)}${r.s ? " · " + esc(r.s) : ""}${r.v ? " · " + esc(r.v) : ""}</div></div>
-      <div class="dcost">${rc.missing.length ? `<span class="flag">needs prices</span>` : gr(rc.cost)}<small>to make one${r.y > 1 ? `, a run makes ${r.y}` : ""}</small></div></div>
+  // the head and the reagents laid out like the game's own crafting window, so the eye finds things in the same places
+  const tiles = r.i.map(([q, x]) => {
+    const k = K(x), u = unit(k), need = q * runs;
+    return `<div class="rg${u.cost == null ? " miss" : u.via ? " part" : ""}" title="${esc(disp[k])}: ${u.cost == null ? "no price yet" : fmt(u.cost) + " gr each"}">${ico(k, u.via ? "Part" : "")}
+      <span class="rg-n">${esc(disp[k])}</span><span class="rg-v"><b>×${need}</b>${u.cost == null ? `<i class="flag">no price</i>` : `<i>${fmt(need * u.cost)} gr</i>`}</span></div>`;
+  }).join("");
+  return `<div class="craft">
+    <div class="chead">${ico(r.n, r.k)}<div class="cmain"><div class="cname">${esc(r.n)}</div>
+      <div class="ctags"><span class="ctag lv">Level ${r.l}</span><span class="ctag">${esc(r.t)}</span>${r.s ? `<span class="ctag">${esc(r.s)}</span>` : ""}${r.y > 1 ? `<span class="ctag">makes ${r.y}</span>` : ""}${r.v ? `<span class="ctag">${esc(r.v)}</span>` : ""}</div></div>
+      <div class="ccost">${rc.missing.length ? `<span class="flag">needs prices</span>` : gr(rc.cost)}<small>to make one</small></div></div>
+    <div class="rtitle">Reagents${runs > 1 ? ` for ${n}` : ""}</div>
+    <div class="reagents">${tiles}</div>
+    <div class="cfoot"><div class="stepper"><button type="button" data-step="-1" data-for="${r.id}" aria-label="One fewer">−</button><input type="number" min="1" max="10000" id="qty-${r.id}" data-qty="${r.id}" value="${n}" aria-label="Pieces to craft"><button type="button" data-step="1" data-for="${r.id}" aria-label="One more">+</button></div>
+      <span class="cnote">At the ${esc(r.st)} · bench fee ${fmt(r.f * runs)} gr${r.i.some(([, x]) => unit(K(x)).via) ? ", parts' fees in the total" : ""}</span>
+      <span class="ctotal">${miss ? `<span class="flag">needs prices</span>` : gr(total)}<small>total for ${n}</small></span></div>
+  </div>
     ${stackHTML(r)}
     <div class="cols">
       <div><h3>Why it costs this much</h3>${ingCards(r, String(r.id))}</div>
       <div><h3>Shopping list</h3>
         <div class="shop">
-          <div class="qty"><label for="qty-${r.id}">Pieces to craft</label><input type="number" min="1" max="10000" id="qty-${r.id}" data-qty="${r.id}" value="${n}"></div>
+          <div class="qty">Everything from raw goods, for ${n}:</div>
           ${lines}
           <div class="tl"><span>${ico("", "")}Bench fees, ${runs} run${runs > 1 ? "s" : ""}${r.i.some(([, x]) => unit(K(x)).via) ? " incl. parts" : ""}</span><span class="v">${fmt(fees)}</span></div>
           <div class="tl tot"><span>Total for ${n}</span><span class="v">${miss ? "needs prices" : gr(total)}</span></div>
@@ -773,6 +817,12 @@ $("catalogue").addEventListener("keydown", e => {
 $("catalogue").addEventListener("toggle", e => {
   const d = e.target; if (d.dataset && d.dataset.path) d.open ? ui.deep.add(d.dataset.path) : ui.deep.delete(d.dataset.path);
 }, true);
+$("catalogue").addEventListener("click", e => {
+  const b = e.target.closest("[data-step]"); if (!b) return;
+  const id = b.dataset.for;
+  ui.qty[id] = Math.max(1, Math.min(10000, (ui.qty[id] || 1) + Number(b.dataset.step))); render();
+  const again = document.querySelector(`[data-step="${b.dataset.step}"][data-for="${id}"]`); if (again) again.focus({ preventScroll: true });
+});
 $("catalogue").addEventListener("change", e => {
   const id = e.target.dataset.qty; if (id == null) return;
   ui.qty[id] = Math.max(1, Math.min(10000, parseInt(e.target.value) || 1)); render();

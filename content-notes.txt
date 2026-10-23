@@ -1,1 +1,1 @@
-Smoother unrolling and scrolling, matching item icons
+Item breakdowns now look like the in-game crafting window: reagents grid with costs, quantity stepper

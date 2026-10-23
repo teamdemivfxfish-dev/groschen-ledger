@@ -1,9 +1,9 @@
 {
  "app": "groschen-ledger",
- "version": "2026.10.23.2",
+ "version": "2026.10.23.3",
  "minApp": "1.0.0",
- "tag": "data-2026.10.23.2",
- "notes": "Smoother unrolling and scrolling, matching item icons",
+ "tag": "data-2026.10.23.3",
+ "notes": "Item breakdowns now look like the in-game crafting window: reagents grid with costs, quantity stepper",
  "files": [
   {
    "path": "assets/decor.webp",
@@ -98,7 +98,7 @@
   {
    "path": "index.html",
    "asset": "index.html",
-   "sha256": "aa8013e260d9f827899dfb650d4646aa0f1f9db202a096fb7121f3dd4b411c21"
+   "sha256": "47f7b1e8a96834475a640670b7d190758fad0e60b602a79a5b61926cd479a98d"
   }
  ]
 }
