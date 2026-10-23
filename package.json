@@ -1,0 +1,50 @@
+{
+  "name": "groschen-ledger",
+  "productName": "Groschen Ledger",
+  "version": "1.0.0",
+  "description": "What it costs to make every craftable piece on KCD Roleplay, from your own market prices.",
+  "main": "main.js",
+  "author": "teamdemivfxfish-dev",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "content": "python -I ../groschen-ledger-site/build/build_site.py && node tools/content-manifest.js",
+    "dist": "npm run content && electron-builder --win portable nsis",
+    "release": "node tools/release.js"
+  },
+  "ledger": {
+    "repo": "teamdemivfxfish-dev/groschen-ledger"
+  },
+  "build": {
+    "appId": "dev.teamdemivfxfish.groschenledger",
+    "productName": "Groschen Ledger",
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json",
+      "content/**/*",
+      "build/icon.ico"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "artifactName": "GroschenLedger-${version}-${arch}-${target}.${ext}"
+    },
+    "portable": {
+      "artifactName": "GroschenLedger-${version}-portable.exe"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "artifactName": "GroschenLedger-${version}-setup.exe",
+      "shortcutName": "Groschen Ledger"
+    }
+  },
+  "devDependencies": {
+    "electron": "^38.8.6",
+    "electron-builder": "^26.15.3"
+  }
+}

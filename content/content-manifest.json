@@ -1,0 +1,104 @@
+{
+ "app": "groschen-ledger",
+ "version": "2026.10.23.1",
+ "minApp": "1.0.0",
+ "tag": "data-2026.10.23.1",
+ "notes": "Recipes from the KCD Roleplay wiki, 23 Oct 2026",
+ "files": [
+  {
+   "path": "assets/decor.webp",
+   "asset": "assets__decor.webp",
+   "sha256": "07e4e4cf9edb68366b8beb4ee7447052195eb9237b4d623959c2c24cb0b12d2d"
+  },
+  {
+   "path": "assets/favicon.png",
+   "asset": "assets__favicon.png",
+   "sha256": "7dbfcf82d170608aad57975503e6305d6cbd32523eb0ad6bf34fb6f4aff8c1c4"
+  },
+  {
+   "path": "assets/flourish.webp",
+   "asset": "assets__flourish.webp",
+   "sha256": "d9ceb0244d61dd33d2bd1099d81ad63150dc735517e92d217aa64cd571339ddf"
+  },
+  {
+   "path": "assets/hero.webp",
+   "asset": "assets__hero.webp",
+   "sha256": "3d689b61f5e48a520fdae3a88f3069bf54a85b7c0a28ece30c9b56686e9656a7"
+  },
+  {
+   "path": "assets/icons.webp",
+   "asset": "assets__icons.webp",
+   "sha256": "7b5047df946f5491f63c5143dac8eebd7dd164c964a445e83fc332b61e9093f4"
+  },
+  {
+   "path": "assets/ill-alchemy.webp",
+   "asset": "assets__ill-alchemy.webp",
+   "sha256": "a667fe4b5a97ebee257fd9f3680153653bcc8823f74a54c35ef0f8e7cc6aa426"
+  },
+  {
+   "path": "assets/ill-armouring.webp",
+   "asset": "assets__ill-armouring.webp",
+   "sha256": "bb7a59190e52bb45b4cf77ae1c2342296032b439f8856812fda9fe168d22c283"
+  },
+  {
+   "path": "assets/ill-bowyery.webp",
+   "asset": "assets__ill-bowyery.webp",
+   "sha256": "2de0a930bc9aea7765b9ecf2a7ede41ad9511f6d6a2574dfce46a0909ab5d04a"
+  },
+  {
+   "path": "assets/ill-brewing.webp",
+   "asset": "assets__ill-brewing.webp",
+   "sha256": "aecc59b9fe8ea8ec0e656930b86a22347968f52819394d460a6030ab39c88b58"
+  },
+  {
+   "path": "assets/ill-carpentry.webp",
+   "asset": "assets__ill-carpentry.webp",
+   "sha256": "8187ab8e1285ebb10365ba35671cee7c3cca585e402cc7d329f5bb5d7356d2de"
+  },
+  {
+   "path": "assets/ill-cooking.webp",
+   "asset": "assets__ill-cooking.webp",
+   "sha256": "bdc6686cea8c4ecfb24a6234b81446ce1c2fc91c7a3508de14fbe5026752a420"
+  },
+  {
+   "path": "assets/ill-jewelling.webp",
+   "asset": "assets__ill-jewelling.webp",
+   "sha256": "0a94e43cda71961d297a46baa20020c44ec2be6e8aeb510bb5abfa5752dc44c6"
+  },
+  {
+   "path": "assets/ill-market.webp",
+   "asset": "assets__ill-market.webp",
+   "sha256": "42b9524f31bd6b4d51c7f88cac76e7f79cdc1336fa319ecdf80a4df8b8c9b840"
+  },
+  {
+   "path": "assets/ill-smithing.webp",
+   "asset": "assets__ill-smithing.webp",
+   "sha256": "e5b0c1d54896ef4a9fdfbc216154596c1c641397253d0e771d5758b8d68b3263"
+  },
+  {
+   "path": "assets/ill-tailoring.webp",
+   "asset": "assets__ill-tailoring.webp",
+   "sha256": "0aab6f85bf552ca50ef2b15536d6c430be42fbe15d2234f05881463d428b01dd"
+  },
+  {
+   "path": "assets/ornament.webp",
+   "asset": "assets__ornament.webp",
+   "sha256": "68f16e7d79a3cf55cb812a4c863ee234b188c350e75af5f5b0f913fcb97fa83e"
+  },
+  {
+   "path": "assets/parchment.webp",
+   "asset": "assets__parchment.webp",
+   "sha256": "fd33d7e56188d5916d1b7edc9495226308804fed9f6a79331ed751768daa9c07"
+  },
+  {
+   "path": "assets/rule.webp",
+   "asset": "assets__rule.webp",
+   "sha256": "42061cd5ced55c550f7ce89f069e3221b45fbb5079204dc996fef91c2498613f"
+  },
+  {
+   "path": "index.html",
+   "asset": "index.html",
+   "sha256": "23f8250277de125f415ba5c89c700bf404cd78b60452d88a0c0353eb279b3de1"
+  }
+ ]
+}
