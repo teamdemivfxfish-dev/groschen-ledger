@@ -1,1 +1,1 @@
-Item breakdowns now look like the in-game crafting window: reagents grid with costs, quantity stepper
+New Trade packs scroll: picks the most cost-effective item to mass produce for each crafter pack

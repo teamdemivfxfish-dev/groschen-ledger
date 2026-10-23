@@ -246,6 +246,40 @@ footer p{max-width:80ch;margin:6px auto}
 .cnote{font:italic 400 .95rem var(--f-display);color:var(--ink-soft);flex:1;min-width:180px}
 .ctotal{text-align:right;font:500 1.3rem/1 var(--f-num);color:var(--brass)}
 @media (max-width:600px){.ccost,.ctotal{text-align:left}.reagents{grid-template-columns:minmax(0,1fr)}}
+#packs{margin-top:26px}
+.pctl{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:end;margin-bottom:16px}
+.pctl label{display:grid;gap:3px;font:400 .85rem var(--f-caps);letter-spacing:.03em;color:var(--ink-soft);width:132px}
+.pctl label.chk{display:flex;align-items:center;gap:7px;width:auto;padding-bottom:8px}
+.pctl label.chk input{accent-color:var(--brass);width:16px;height:16px}
+.pctl select{font:500 .9rem var(--f-body);padding:6px 8px;color:var(--ink);background:var(--input);border:1px solid var(--line-hi);border-bottom:2px solid #6a5436;border-radius:3px}
+.psell{margin-left:auto;text-align:right;font:500 1.35rem var(--f-num);color:var(--brass)}
+.psell small{display:block;font:400 .72rem var(--f-num);color:var(--ink-faint)}
+.prec{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 16px;margin-bottom:16px;border:1px solid #6a5436;border-radius:4px;background:linear-gradient(90deg,rgba(217,183,101,.10),rgba(217,183,101,.02));box-shadow:inset 3px 0 0 var(--brass)}
+.prec .ico{--s:56px}
+.prec .eyebrow{font:400 .8rem var(--f-caps);letter-spacing:.1em;color:var(--brass)}
+.pbig{font:400 1.5rem/1.15 var(--f-display);color:var(--ink)}
+.pline{font-size:.92rem;color:var(--ink-soft);margin-top:3px}
+.pline b{font:500 .92rem var(--f-num);color:var(--ink)}
+.pprofit{text-align:right;font:600 1.7rem var(--f-num);color:var(--sage);white-space:nowrap}
+.pprofit.neg{color:var(--ember-ink)}
+.pprofit small{display:block;font:400 .72rem var(--f-num);color:var(--ink-faint)}
+.phead,.prow{display:grid;grid-template-columns:40px minmax(0,1fr) 84px 76px 76px 92px;gap:10px;align-items:center}
+.phead{font:400 .78rem var(--f-caps);letter-spacing:.04em;color:var(--ink-faint);padding:0 6px 6px;border-bottom:1px solid var(--line);text-align:right}
+.phead span:nth-child(2){text-align:left}
+.prow{padding:6px;border-radius:3px;content-visibility:auto;contain-intrinsic-size:auto 52px}
+.prow:hover{background:var(--card-hi)}
+.prow.top{box-shadow:inset 2px 0 0 var(--brass)}
+.prow .nm{font-weight:500;line-height:1.2}
+.prow .nm a{color:inherit;text-decoration:none}
+.prow .nm a:hover{color:var(--brass);text-decoration:underline}
+.prow .sub{font-size:.78rem;color:var(--ink-faint)}
+.prow .num{text-align:right;font:500 .95rem var(--f-num);color:var(--ink-soft)}
+.prow .num.up{color:var(--sage)}
+.prow .num.down{color:var(--ember-ink)}
+.prow input{padding:4px 6px;font-size:.9rem}
+.pneed{margin-top:18px}
+.pfoot{font-size:.82rem;color:var(--ink-faint);margin:16px 0 0;line-height:1.45}
+@media (max-width:700px){.phead{display:none}.prow{grid-template-columns:40px minmax(0,1fr) 70px 70px}.prow .pc:nth-child(4),.prow .pc:nth-child(5){display:none}.prec{grid-template-columns:auto minmax(0,1fr)}.pprofit{grid-column:1/-1;text-align:left}.psell{margin-left:0;text-align:left}.pctl label{width:calc(50% - 7px)}}
 </style>
 </head>
 <body>
@@ -295,6 +329,20 @@ footer p{max-width:80ch;margin:6px auto}
       <div class="tabs" role="tablist" id="tabs"></div>
       <div role="tabpanel" id="tabpanel"></div>
       <div class="keybox" id="keybox"></div>
+    </div></div></div>
+    <div class="rod"></div>
+  </section>
+
+  <section class="scroll" id="packs" data-kind="packs">
+    <button class="label" aria-expanded="false" aria-controls="packs-roll">
+      <img class="mini" src="assets/ill-carpentry.webp?v=8187ab8e12" alt="" width="76" height="76">
+      <div><h2>Trade packs</h2><div class="sub">What to mass produce for a crafter's pack</div></div>
+      <span class="cue"><span class="orn"></span><span class="cuetext">Unroll</span></span>
+    </button>
+    <div class="rod"></div>
+    <div class="roll" id="packs-roll"><div class="sheet"><div class="sheet-in">
+      <div class="tabs" role="tablist" id="ptabs"></div>
+      <div role="tabpanel" id="ppanel"></div>
     </div></div></div>
     <div class="rod"></div>
   </section>
@@ -585,7 +633,178 @@ function detailHTML(r) {
         ${usedHere.length ? `<h3 style="margin-top:18px">Used in ${usedHere.length} recipes</h3><div class="used">${usedHere.slice(0, 24).map(x => `<span class="chip" data-id="${x.id}" role="button" tabindex="0">${ico(x.n, x.k)}${esc(x.n)}</span>`).join("")}${usedHere.length > 24 ? `<span class="chip" data-q="${esc(r.n)}" role="button" tabindex="0">+${usedHere.length - 24} more</span>` : ""}</div>` : ""}
       </div>
     </div>`;
+}// ---- trade packs ----
+// A crafter's pack is filled to a set worth (450 gr for ironware). The game counts each good at its set worth and
+// each piece at its recipe's cost in set worths plus fee, never at what you paid. So the piece to mass produce is the
+// one whose set worth is furthest above what it costs you at today's prices. Rules from wiki.kcdroleplay.com/trade-packs/
+const PACK_KIND = {
+  robust: { name: "Robust", km: 9, keeps: "keeps 12 h" },
+  normal: { name: "Normal", km: 8, keeps: "keeps 3 h" },
+  perish: { name: "Perishable", km: 11, keeps: "keeps 1 h" },
+  very: { name: "Very perishable", km: 11, keeps: "keeps 30 min" },
+  precious: { name: "Precious", km: 10, keeps: "keeps 12 h" },
+};
+const PACKS = [
+  { id: "ironware", name: "Crate of ironware", t: "Smithing", worth: 450, kind: "robust",
+    goods: ["iron ore", "coal", "copper ore", "steel bars", "hafts", "found horseshoes", "holy nails", "broken crankshafts", "ghostly horseshoes"],
+    mats: ["Scrap metal", "Iron", "Fastening material", "Antler shards", "Copper", "Coin sword pommel", "Ordinary sword guard", "Straight sword guard", "Frankfurt steel", "Pear sword pommel", "Eight-sided sword pommel", "Horned sword guard", "Reinforced sword guard", "Toledo steel", "Decorated sword pommel", "Sheet steel"] },
+  { id: "mail", name: "Crate of mail", t: "Armouring", worth: 450, kind: "robust",
+    goods: ["iron ore", "coal", "copper ore", "steel bars", "hides", "padding"], mats: ["Iron"] },
+  { id: "cloth", name: "Rolls of cloth", t: "Tailoring", worth: 400, kind: "normal",
+    goods: ["leather", "padding", "nettles", "hides", "wolf pelts", "owl feathers", "hanged man's nooses"], mats: ["Pig skin", "Cow skin", "Deer skin"] },
+  { id: "arrows", name: "Sheaves of arrows", t: "Bowyery", worth: 450, kind: "robust",
+    goods: ["logs", "pine resin", "bowstrings", "hafts", "antlers", "boar tusks"], mats: [] },
+  { id: "coffer", name: "Goldsmith's coffer", t: "Jewelling", worth: 1500, kind: "precious",
+    goods: ["fine silver", "silver ore", "gold ore", "commemorative coins"], mats: ["Decorated sword pommel", "Coloured gold"] },
+  { id: "remedies", name: "Chest of remedies", t: "Alchemy", worth: 350, kind: "perish",
+    goods: ["nettles", "sage", "chamomile", "belladonna", "mandrake root", "ginger", "elderberry leaves", "cobwebs", "charcoal", "sulphur", "saltpetre", "charcoal water"], mats: ["Rock Pitch", "Enamel powder", "Acidum chloridum"] },
+  { id: "victuals", name: "Basket of victuals", t: "Cooking", worth: 300, kind: "very",
+    goods: ["venison", "boar meat", "hare", "roach", "carp", "eel", "pike", "barley malt", "sage"], mats: [] },
+  { id: "ale", name: "Barrel of ale and wine", t: "Brewing", worth: 400, kind: "normal",
+    goods: ["hops", "barley malt", "grapes", "honey", "plums"], mats: [] },
+  { id: "joinery", name: "Crate of joinery", t: "Carpentry", worth: 450, kind: "robust",
+    goods: ["logs", "pine resin", "iron ore", "steel bars", "leather", "padding"], mats: [] },
+];
+// the game's set worth of raw goods: the wiki's gathering base prices and the farms' worth a load
+const SET_WORTH = { "logs": 4, "pine resin": 6, "owl feathers": 14, "honey": 8, "cobwebs": 4, "iron ore": 5, "coal": 3, "copper ore": 8,
+  "silver ore": 40, "gold ore": 30, "saltpetre": 8, "sulphur": 8, "roach": 2, "carp": 5, "eel": 7, "pike": 9,
+  "cabbage": 7, "carrots": 6, "onions": 7, "barley": 9, "hay": 6 };
+const NEED = [[1.6, "Empty (×1.6)"], [1, "Half full (×1.0)"], [0.4, "Full (×0.4)"]];
+const LSP = "groschen-ledger-packs";
+let packs = { tab: "ironware", km: 3, need: 1, route: false, worth: {}, target: {}, gain: {}, all: false };
+try { const s = JSON.parse(lsGet(LSP) || "null"); if (s) packs = { ...packs, ...s, worth: s.worth || {}, target: s.target || {}, gain: s.gain || {} }; } catch(e) {}
+const savePacks = () => lsSet(LSP, JSON.stringify(packs));
+
+// a good's worth in a pack: your figure from the pack card, else its set worth, else its cheapest recipe in worths
+let wmemo = new Map();
+function worthOf(k, stack = new Set()) {
+  if (wmemo.has(k)) return wmemo.get(k);
+  let res;
+  if (packs.worth[k] != null) res = { w: packs.worth[k], src: "card", missing: [] };
+  else if (!producers[k]) res = SET_WORTH[k] != null ? { w: SET_WORTH[k], src: "set", missing: [] } : { w: null, missing: [k] };
+  else if (stack.has(k)) return { w: null, missing: [] };
+  else {
+    stack.add(k);
+    let best = null, miss = null;
+    for (const r of producers[k]) {
+      let s = r.f; const m = new Set();
+      for (const [q, n] of r.i) { const x = worthOf(K(n), stack); if (x.w == null) x.missing.forEach(v => m.add(v)); else s += q * x.w; }
+      if (!m.size) { if (!best || s / r.y < best.w) best = { w: s / r.y, src: "recipe", r, missing: [] }; }
+      else if (!miss || m.size < miss.length) miss = [...m];
+    }
+    stack.delete(k);
+    res = best || { w: null, missing: miss || [] };
+  }
+  wmemo.set(k, res);
+  return res;
 }
+function packCandidates(p) {
+  const ks = new Set([...p.goods, ...p.mats].map(K));
+  R.forEach(r => { if (r.t === p.t) ks.add(K(r.n)); });
+  return [...ks].filter(k => disp[k]);
+}
+const packTarget = p => packs.target[p.id] ?? p.worth;
+const packGain = p => packs.gain[p.id] ?? PACK_KIND[p.kind].km;
+const packMult = p => (1 + packGain(p) / 100 * packs.km) * packs.need * (packs.route ? 1.25 : 1);
+function benchSecs(k) {
+  const u = unit(k), r = u.via || (producers[k] || [])[0];
+  const s = r && parseFloat(r.s);
+  return u.bought || !s ? null : s;
+}
+function packRows(p) {
+  const target = packTarget(p), mult = packMult(p), rows = [], need = {};
+  for (const k of packCandidates(p)) {
+    const w = worthOf(k), u = unit(k);
+    if (w.w == null) { w.missing.forEach(m => need[m] = (need[m] || 0) + 1); continue; }
+    if (u.cost == null || w.w <= 0) continue;
+    const n = Math.ceil(target / w.w - 1e-9), worth = n * w.w, cost = n * u.cost, sale = worth * mult;
+    const secs = benchSecs(k);
+    rows.push({ k, w: w.w, src: w.src, each: u.cost, n, worth, cost, sale, profit: sale - cost, ratio: w.w / u.cost, secs: secs && n * secs, id: (producers[k] || [])[0]?.id });
+  }
+  // the most worth for each groschen first; on a tie, the pack that overfills least, then the least time at the bench
+  const q = x => Math.round(x.ratio * 1000);
+  rows.sort((a, b) => q(b) - q(a) || a.worth - b.worth || (a.secs || 0) - (b.secs || 0));
+  // the goods that leave the most pieces unreckoned first; the pack's own goods always show
+  const own = new Set(p.goods.map(K));
+  const list = Object.keys(need).filter(k => !producers[k]).sort((a, b) => own.has(b) - own.has(a) || need[b] - need[a]);
+  return { rows, need: list.filter((k, i) => i < 8 || own.has(k)).map(k => [k, need[k]]) };
+}
+const mins = s => s == null ? "" : s < 90 ? Math.round(s) + " s" : Math.round(s / 60) + " min";
+function packRec(p, r) {
+  const st = p.t === "Carpentry" ? "bench" : STATION[p.t];
+  return `<div class="prec">${ico(r.k, producers[r.k] ? "Part" : "")}
+    <div><div class="eyebrow">Best to mass produce now</div>
+      <div class="pbig">${producers[r.k] ? "Make" : "Pack"} ${r.n} × ${esc(disp[r.k])}</div>
+      <div class="pline">Costs you <b>${gr(r.cost)}</b> · counts <b>${gr(r.worth)}</b> of ${fmt(packTarget(p))} · sells for about <b>${gr(r.sale)}</b>${r.secs ? ` · ${mins(r.secs)} at the ${esc(st)}` : ""}</div></div>
+    ${r.ratio < 1.005 ? `<p class="pline" style="grid-column:2/-1;margin:0">Nothing here is cheaper to you than the worth it adds yet. Set what goods really cost under Market prices and the ledger finds where the edge is.</p>` : ""}
+    <div class="pprofit ${r.profit < 0 ? "neg" : ""}" style="grid-row:1;grid-column:3"><small>a pack</small>${r.profit >= 0 ? "+" : "−"}${fmt(Math.abs(r.profit))}<small>gr</small></div></div>`;
+}
+function packRow(p, r, i) {
+  const ph = (() => { const x = wmemo.get(r.k); return x && x.src !== "card" ? fmt(x.w) : ""; })();
+  const set = packs.worth[r.k];
+  return `<div class="prow${i === 0 ? " top" : ""}">${ico(r.k, producers[r.k] ? "Part" : "")}
+    <div class="pn"><div class="nm">${r.id != null ? `<a href="#item-${r.id}">${esc(disp[r.k])}</a>` : esc(disp[r.k])}</div>
+      <div class="sub">${r.n} for a pack · costs ${gr(r.cost)}${r.secs ? " · " + mins(r.secs) : ""}</div></div>
+    <div class="pc"><input type="number" min="0" step="0.1" inputmode="decimal" id="pw-${slug(r.k)}" data-pw="${esc(r.k)}" value="${set ?? ""}" placeholder="${ph}" aria-label="Pack worth of one ${esc(disp[r.k])}"></div>
+    <div class="pc num">${fmt(r.each)}</div>
+    <div class="pc num ${r.ratio >= 1 ? "up" : "down"}">${r.ratio.toFixed(2)}</div>
+    <div class="pc num ${r.profit < 0 ? "down" : "up"}">${r.profit >= 0 ? "+" : "−"}${fmt(Math.abs(r.profit))}</div></div>`;
+}
+function renderPacks() {
+  wmemo = new Map();
+  const el = document.getElementById("ppanel"); if (!el) return;
+  if (!PACKS.some(p => p.id === packs.tab)) packs.tab = PACKS[0].id;
+  document.getElementById("ptabs").innerHTML = PACKS.map(p => `<button role="tab" id="ptab-${p.id}" data-ptab="${p.id}" aria-selected="${p.id === packs.tab}">${esc(p.name)}<span>${fmt(packTarget(p))}</span></button>`).join("");
+  const p = PACKS.find(p => p.id === packs.tab), kind = PACK_KIND[p.kind];
+  const { rows, need } = packRows(p);
+  const shown = packs.all ? rows : rows.slice(0, 12);
+  const sell = packTarget(p) * packMult(p);
+  el.innerHTML = `<p class="tabnote">Packed at the ${esc(p.t === "Carpentry" ? "carpenter's bench" : STATION[p.t])} from ${esc(p.t.toLowerCase())} goods and pieces. The game counts each one at its set worth, never at what you paid, so the best thing to make is the one that costs you least for the worth it adds.</p>
+    <div class="pctl">
+      <label>Pack worth<input type="number" min="1" step="1" id="pset-target" data-pset="target" value="${packs.target[p.id] ?? ""}" placeholder="${p.worth}"></label>
+      <label>Distance, km<input type="number" min="1.5" step="0.5" id="pset-km" data-pset="km" value="${packs.km}"></label>
+      <label>${esc(kind.name)}, % a km<input type="number" min="0" step="1" id="pset-gain" data-pset="gain" value="${packs.gain[p.id] ?? ""}" placeholder="${kind.km}"></label>
+      <label>Buyer town's stock<select id="pset-need" data-pset="need">${NEED.map(([v, t]) => `<option value="${v}"${v === packs.need ? " selected" : ""}>${t}</option>`).join("")}</select></label>
+      <label class="chk"><input type="checkbox" id="pset-route" data-pset="route"${packs.route ? " checked" : ""}>Route of the day (+25%)</label>
+      <div class="psell"><small>a full pack sells for about</small>${gr(sell)}<small>${esc(kind.keeps)}</small></div>
+    </div>
+    ${rows.length ? packRec(p, rows[0]) : `<p class="empty">Nothing in this pack can be reckoned yet: set the worths below.</p>`}
+    ${rows.length ? `<div class="phead"><span></span><span>Item</span><span>Worth each</span><span>Costs you</span><span>Worth / gr</span><span>Profit a pack</span></div>
+    <div class="prows">${shown.map((r, i) => packRow(p, r, i)).join("")}</div>
+    ${rows.length > 12 ? `<div class="more"><button class="btn ghost" type="button" id="pall">${packs.all ? "Show the best 12" : `Show all ${rows.length}`}</button></div>` : ""}` : ""}
+    ${need.length ? `<div class="pneed"><p class="tabnote">These goods have no set worth on the wiki. Copy “what each is worth” from the pack's card in game to rank everything made from them:</p>
+      <div class="goods">${need.map(([k, c]) => `<div class="good">${ico(k, "")}<div><div class="nm">${esc(disp[k] || cap(k))}</div><div class="meta"><span>set worth</span><span>${c} item${c > 1 ? "s" : ""} wait on it</span></div></div>
+        <input type="number" min="0" step="0.1" inputmode="decimal" id="pw-${slug(k)}" data-pw="${esc(k)}" value="${packs.worth[k] ?? ""}" aria-label="Set worth of ${esc(disp[k] || k)}"></div>`).join("")}</div></div>` : ""}
+    <p class="pfoot">Worth each is reckoned from the wiki's set worths, the same way the game does (steel bars: 3 iron ore at 5 and 2 coal at 3, two made, so 10.5). The game takes the auction price instead when that is lower, so if the pack card shows less, type its figure over the faint one. Costs you uses your market prices. Past 10 packs sold in 24 hours each pays less (−20% for the next 5, −30% for the 5 after, then half). The sale assumes a fresh pack.</p>`;
+}
+document.getElementById("ptabs").addEventListener("click", e => {
+  const b = e.target.closest("[data-ptab]"); if (!b) return;
+  packs.tab = b.dataset.ptab; packs.all = false; savePacks(); renderPacks();
+});
+document.getElementById("packs").addEventListener("click", e => {
+  if (e.target.closest(".label")) { ui.packs = !ui.packs; saveUI(); unroll(document.getElementById("packs"), ui.packs); }
+  if (e.target.id === "pall") { packs.all = !packs.all; savePacks(); renderPacks(); }
+});
+let pTimer;
+document.getElementById("packs").addEventListener("input", e => {
+  const t = e.target, p = PACKS.find(p => p.id === packs.tab);
+  const num = t.value.trim() === "" ? null : Number(t.value);
+  if (t.dataset.pw != null) { if (num == null || isNaN(num) || num < 0) delete packs.worth[t.dataset.pw]; else packs.worth[t.dataset.pw] = num; }
+  else if (t.dataset.pset === "target" || t.dataset.pset === "gain") { const bag = packs[t.dataset.pset]; if (num == null || isNaN(num) || num <= 0 && t.dataset.pset === "target") delete bag[p.id]; else bag[p.id] = num; }
+  else if (t.dataset.pset === "km") { if (num != null && num > 0) packs.km = num; }
+  else if (t.dataset.pset === "need") packs.need = Number(t.value);
+  else if (t.dataset.pset === "route") packs.route = t.checked;
+  else return;
+  savePacks();
+  clearTimeout(pTimer);
+  pTimer = setTimeout(() => {
+    const id = document.activeElement && document.activeElement.id;
+    renderPacks();
+    if (id) { const f = document.getElementById(id); if (f) f.focus({ preventScroll: true }); }
+  }, 200);
+});
+
+
 // ---- price edits (from the market scroll or a breakdown slip) ----
 document.addEventListener("input", e => {
   const inp = e.target; if (!inp.dataset || inp.dataset.k == null) return;
@@ -638,11 +857,11 @@ function setStatic(scroll, open) {
 }
 
 // ---- UI state ----
-const ui = { tab: null, openTrades: new Set(), openItem: null, deep: new Set(), qty: {}, sort: "lv", limit: {}, market: false };
+const ui = { tab: null, openTrades: new Set(), openItem: null, deep: new Set(), qty: {}, sort: "lv", limit: {}, market: false, packs: false };
 const $ = id => document.getElementById(id);
 const LSUI = "groschen-ledger-ui";
-try { const s = JSON.parse(lsGet(LSUI) || "null"); if (s) { ui.tab = s.tab || null; (s.open || []).forEach(t => ui.openTrades.add(t)); ui.market = !!s.market; } } catch(e) {}
-function saveUI() { lsSet(LSUI, JSON.stringify({ tab: ui.tab, open: [...ui.openTrades], market: ui.market })); }
+try { const s = JSON.parse(lsGet(LSUI) || "null"); if (s) { ui.tab = s.tab || null; (s.open || []).forEach(t => ui.openTrades.add(t)); ui.market = !!s.market; ui.packs = !!s.packs; } } catch(e) {}
+function saveUI() { lsSet(LSUI, JSON.stringify({ tab: ui.tab, open: [...ui.openTrades], market: ui.market, packs: ui.packs })); }
 
 // ---- market scroll ----
 const TABS = () => {
@@ -832,11 +1051,12 @@ $("catalogue").addEventListener("change", e => {
 function render() {
   const a = document.activeElement, id = a && a.id;
   const y = window.scrollY;
-  recompute(); renderMarket(true); renderCatalogue();
+  recompute(); renderMarket(true); renderPacks(); renderCatalogue();
   window.scrollTo(0, y);
   if (id && id !== "q") { const el = $(id); if (el) el.focus({ preventScroll: true }); }
 }
-recompute(); renderMarket(); renderCatalogue();
+recompute(); renderMarket(); renderPacks(); renderCatalogue();
+setStatic($("packs"), ui.packs);
 setStatic($("market"), ui.market || !Object.keys(state.prices).length && !lsGet(LSUI));
 if ($("market").classList.contains("open")) ui.market = true;
 // links: #smithing opens that scroll, #item-123 opens one item's reckoning
