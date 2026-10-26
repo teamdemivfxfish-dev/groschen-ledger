@@ -18,10 +18,20 @@ const man = path.join(stage, 'content-manifest.json'); fs.writeFileSync(man, JSO
 if (withApp) for (const f of fs.readdirSync(path.join(ROOT, 'dist')))
   if (f.startsWith(`GroschenLedger-${PKG.version}`) && f.endsWith('.exe')) assets.push(path.join(ROOT, 'dist', f));
 
+// the README's download links point straight at the newest app's .exe files (the latest release is usually data only)
+const README = path.join(ROOT, '..', 'README.md');
+const LINK = /releases\/download\/[^/\s)]+\/GroschenLedger-[\d.]+-(setup|portable)\.exe/g;
+let readme = fs.readFileSync(README, 'utf8');
+if (withApp) {
+  readme = readme.replace(LINK, (x, kind) => `releases/download/${m.tag}/GroschenLedger-${PKG.version}-${kind}.exe`);
+  fs.writeFileSync(README, readme);
+}
+const dl = kind => `https://github.com/${repo}/` + (readme.match(LINK) || []).find(x => x.endsWith(`-${kind}.exe`));
 const notes = [m.notes || 'Updated recipes and prices data.', '',
   withApp ? `Download **GroschenLedger-${PKG.version}-setup.exe** (installs, adds a Start menu shortcut) or the **portable** .exe (runs as is).`
-          : 'Already have the app? Open it and press **Check for updates**.'].join('\n');
+          : `Already have the app? Open it and press **Check for updates**. New here? Download the [installer](${dl('setup')}) or the [portable version](${dl('portable')}), or read the [setup guide](https://github.com/${repo}#readme).`].join('\n');
 const gh = (...a) => execFileSync('gh', a, { stdio: 'inherit' });
 gh('release', 'create', m.tag, '--repo', repo, '--title', `Groschen Ledger · data ${m.version}${withApp ? ` · app ${PKG.version}` : ''}`, '--notes', notes, '--latest', ...assets);
 fs.rmSync(stage, { recursive: true, force: true });
 console.log(`Released ${m.tag} to https://github.com/${repo}/releases/tag/${m.tag}`);
+if (withApp) console.log('README download links now point at this release: commit and push README.md');

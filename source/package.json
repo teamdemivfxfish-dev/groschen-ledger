@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "start": "electron .",
-    "content": "python -I ../groschen-ledger-site/build/build_site.py && node tools/content-manifest.js",
+    "content": "python -I ../../groschen-ledger-site/build/build_site.py && node tools/content-manifest.js",
     "dist": "npm run content && electron-builder --win portable nsis",
     "release": "node tools/release.js"
   },
