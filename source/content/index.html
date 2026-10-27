@@ -635,7 +635,8 @@ function detailHTML(r) {
     </div>`;
 }// ---- trade packs ----
 // A crafter's pack is filled to a set worth (450 gr for ironware). The game counts each good at its set worth and
-// each piece at its recipe's cost in set worths plus fee, never at what you paid. So the piece to mass produce is the
+// each piece at its recipe's cost in set worths, never at what you paid. The bench fee is NOT counted: it is money you
+// spend, not worth the pack gains (a horseman's pick ranked first with its 107 gr fee as worth and lost money, 2026-10-27). So the piece to mass produce is the
 // one whose set worth is furthest above what it costs you at today's prices. Rules from wiki.kcdroleplay.com/trade-packs/
 const PACK_KIND = {
   robust: { name: "Robust", km: 9, keeps: "keeps 12 h" },
@@ -689,7 +690,7 @@ function worthOf(k, stack = new Set()) {
     stack.add(k);
     let best = null, miss = null;
     for (const r of producers[k]) {
-      let s = r.f; const m = new Set();
+      let s = 0; const m = new Set();
       for (const [q, n] of r.i) { const x = worthOf(K(n), stack); if (x.w == null) x.missing.forEach(v => m.add(v)); else s += q * x.w; }
       if (!m.size) { if (!best || s / r.y < best.w) best = { w: s / r.y, src: "recipe", r, missing: [] }; }
       else if (!miss || m.size < miss.length) miss = [...m];
@@ -777,7 +778,7 @@ function renderPacks() {
     ${need.length ? `<div class="pneed"><p class="tabnote">These goods have no set worth on the wiki. Copy “what each is worth” from the pack's card in game to rank everything made from them:</p>
       <div class="goods">${need.map(([k, c]) => `<div class="good">${ico(k, "")}<div><div class="nm">${esc(disp[k] || cap(k))}</div><div class="meta"><span>set worth</span><span>${c} item${c > 1 ? "s" : ""} wait on it</span></div></div>
         <input type="number" min="0" step="0.1" inputmode="decimal" id="pw-${slug(k)}" data-pw="${esc(k)}" value="${packs.worth[k] ?? ""}" aria-label="Set worth of ${esc(disp[k] || k)}"></div>`).join("")}</div></div>` : ""}
-    <p class="pfoot">Worth each is reckoned from the wiki's set worths, the same way the game does (steel bars: 3 iron ore at 5 and 2 coal at 3, two made, so 10.5). The game takes the auction price instead when that is lower, so if the pack card shows less, type its figure over the faint one. Costs you uses your market prices. Past 10 packs sold in 24 hours each pays less (−20% for the next 5, −30% for the 5 after, then half). The sale assumes a fresh pack.</p>`;
+    <p class="pfoot">Worth each is reckoned from the wiki's set worths, the same way the game does (steel bars: 3 iron ore at 5 and 2 coal at 3, two made, so 10.5). Bench fees add nothing to a piece's worth, so a piece with a big fee is rarely worth packing. The game takes the auction price instead when that is lower, so if the pack card shows less, type its figure over the faint one. Costs you uses your market prices. Past 10 packs sold in 24 hours each pays less (−20% for the next 5, −30% for the 5 after, then half). The sale assumes a fresh pack.</p>`;
 }
 document.getElementById("ptabs").addEventListener("click", e => {
   const b = e.target.closest("[data-ptab]"); if (!b) return;

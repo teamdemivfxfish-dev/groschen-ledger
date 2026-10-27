@@ -1,1 +1,1 @@
-Farm crops from the 24 October update (hops, grapes, plums, sage, chamomile, hemp fibre, flax) now count at their set worth in trade packs; a full town now pays at least 85%; Steel added to the ironware and mail packs
+Trade packs: a piece's bench fee no longer counts toward its pack worth. Pieces with big fees (like the horseman's pick) were ranked far too high and lost money when shipped.
