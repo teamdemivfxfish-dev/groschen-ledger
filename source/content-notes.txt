@@ -1,1 +1,1 @@
-Trade packs: a piece's bench fee no longer counts toward its pack worth. Pieces with big fees (like the horseman's pick) were ranked far too high and lost money when shipped.
+Trade packs: the bench fee does count toward a piece's pack worth after all (the 27.1 change is undone). Raw goods now count at their set worth or your market price, whichever is lower, as the game does, which brings the horseman's pick to about 152 like the pack card.

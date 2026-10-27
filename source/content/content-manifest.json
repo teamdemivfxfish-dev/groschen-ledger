@@ -1,9 +1,9 @@
 {
  "app": "groschen-ledger",
- "version": "2026.10.27.1",
+ "version": "2026.10.27.2",
  "minApp": "1.0.0",
- "tag": "data-2026.10.27.1",
- "notes": "Trade packs: a piece's bench fee no longer counts toward its pack worth. Pieces with big fees (like the horseman's pick) were ranked far too high and lost money when shipped.",
+ "tag": "data-2026.10.27.2",
+ "notes": "Trade packs: the bench fee does count toward a piece's pack worth after all (the 27.1 change is undone). Raw goods now count at their set worth or your market price, whichever is lower, as the game does, which brings the horseman's pick to about 152 like the pack card.",
  "files": [
   {
    "path": "assets/decor.webp",
@@ -98,7 +98,7 @@
   {
    "path": "index.html",
    "asset": "index.html",
-   "sha256": "68b9de5ee2f97af2bcce63874ea12c0f05997ba51e48a45b097a33ef9ad2585a"
+   "sha256": "e57faf07e19aa2500ccef42a272dee563a808180a891ceba8d37f137bfdcce4b"
   }
  ]
 }
