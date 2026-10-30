@@ -1,14 +1,14 @@
 {
  "app": "groschen-ledger",
- "version": "2026.10.27.2",
+ "version": "2026.10.30.1",
  "minApp": "1.0.0",
- "tag": "data-2026.10.27.2",
- "notes": "Trade packs: the bench fee does count toward a piece's pack worth after all (the 27.1 change is undone). Raw goods now count at their set worth or your market price, whichever is lower, as the game does, which brings the horseman's pick to about 152 like the pack card.",
+ "tag": "data-2026.10.30.1",
+ "notes": "Recipes brought up to date with the wiki (30 October): 1,259 recipes, up from 1,205.\n\n- Steel bars are now called steel, as on the wiki and the pack cards. Any price you set for steel bars carries over.\n- Linen is made from 2 flax. Padding, bandages and bowstrings now use linen, and many tailoring pieces no longer need padding.\n- Flax and hemp fibre are new market goods (set worth 6 and 5).\n- 40 new furniture pieces with their pictures: icons, tapestries, lanterns, candles, wreaths, pelts, hearths, the lute and more. Pieces bought only with coin show that cost.\n- Second recipes for bandages, cooked hare, roast chicken leg, crayfish and trout are listed beside the first.\n- Many armour pieces moved levels and changed materials, meat dishes now take two cuts, and several cooked dishes take a side.",
  "files": [
   {
    "path": "assets/decor.webp",
    "asset": "assets__decor.webp",
-   "sha256": "07e4e4cf9edb68366b8beb4ee7447052195eb9237b4d623959c2c24cb0b12d2d"
+   "sha256": "640e571d50fbaad2b6d46a7d230f89310d17eb1224771f31949adbe99990e2dd"
   },
   {
    "path": "assets/favicon.png",
@@ -98,7 +98,7 @@
   {
    "path": "index.html",
    "asset": "index.html",
-   "sha256": "e57faf07e19aa2500ccef42a272dee563a808180a891ceba8d37f137bfdcce4b"
+   "sha256": "efaed68a7f1adeeb32af647951fa9b3e6645403c4747e22792fb167aec0ef2aa"
   }
  ]
 }
