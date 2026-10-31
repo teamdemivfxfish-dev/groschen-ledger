@@ -279,7 +279,19 @@ footer p{max-width:80ch;margin:6px auto}
 .prow input{padding:4px 6px;font-size:.9rem}
 .pneed{margin-top:18px}
 .pfoot{font-size:.82rem;color:var(--ink-faint);margin:16px 0 0;line-height:1.45}
-@media (max-width:700px){.phead{display:none}.prow{grid-template-columns:40px minmax(0,1fr) 70px 70px}.prow .pc:nth-child(4),.prow .pc:nth-child(5){display:none}.prec{grid-template-columns:auto minmax(0,1fr)}.pprofit{grid-column:1/-1;text-align:left}.psell{margin-left:0;text-align:left}.pctl label{width:calc(50% - 7px)}}
+.psx{padding:14px 16px 4px;margin-bottom:22px;border:1px dashed var(--line-hi);border-radius:4px}
+.psx .eyebrow{font:400 .8rem var(--f-caps);letter-spacing:.1em;color:var(--brass);margin-bottom:4px}
+.psx .tabnote{margin-bottom:10px}
+.pctl label.wide{width:240px}
+.psx input[type=text]{font:500 1rem var(--f-body);padding:6px 8px;width:100%;min-width:0;color:var(--ink);background:var(--input);border:1px solid var(--line-hi);border-bottom:2px solid #6a5436;border-radius:3px}
+.psx input[type=text]:focus{border-color:var(--brass);outline:none;box-shadow:0 0 0 3px rgba(217,183,101,.15)}
+.psx input[type=text]::placeholder{color:#6e6250}
+.psx .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.psx .prec{margin-bottom:10px}
+.psx .prec.weak{background:none;box-shadow:inset 3px 0 0 var(--line-hi);border-color:var(--line)}
+.psx .verdict{font:400 1.15rem var(--f-display);color:var(--ink);margin:0 0 10px}
+.psx .verdict b{color:var(--brass);font-weight:400}
+@media (max-width:700px){.phead{display:none}.prow{grid-template-columns:40px minmax(0,1fr) 70px 70px}.prow .pc:nth-child(4),.prow .pc:nth-child(5){display:none}.prec{grid-template-columns:auto minmax(0,1fr)}.pprofit{grid-column:1/-1;text-align:left}.psell{margin-left:0;text-align:left}.pctl label{width:calc(50% - 7px)}.pctl label.wide{width:100%}}
 </style>
 </head>
 <body>
@@ -341,6 +353,17 @@ footer p{max-width:80ch;margin:6px auto}
     </button>
     <div class="rod"></div>
     <div class="roll" id="packs-roll"><div class="sheet"><div class="sheet-in">
+      <div class="psx" id="psurplus">
+        <div class="eyebrow">Got a surplus?</div>
+        <p class="tabnote">Type what you have too much of and how many. The ledger shows each pack that takes it and whether shipping pays better than selling it at market.</p>
+        <div class="pctl">
+          <label class="wide">Item<input type="text" id="psx-item" list="psx-list" autocomplete="off" spellcheck="false" placeholder="steel, padding, nettles…"></label>
+          <label>How many<input type="number" min="1" step="1" inputmode="numeric" id="psx-qty" placeholder="1"></label>
+          <label>Sells at market, each<input type="number" min="0" step="0.1" inputmode="decimal" id="psx-alt"></label>
+        </div>
+        <datalist id="psx-list"></datalist>
+        <div id="psx-out" aria-live="polite"></div>
+      </div>
       <div class="tabs" role="tablist" id="ptabs"></div>
       <div role="tabpanel" id="ppanel"></div>
     </div></div></div>
@@ -787,7 +810,108 @@ function renderPacks() {
       <div class="goods">${need.map(([k, c]) => `<div class="good">${ico(k, "")}<div><div class="nm">${esc(disp[k] || cap(k))}</div><div class="meta"><span>set worth</span><span>${c} item${c > 1 ? "s" : ""} wait on it</span></div></div>
         <input type="number" min="0" step="0.1" inputmode="decimal" id="pw-${slug(k)}" data-pw="${esc(k)}" value="${packs.worth[k] ?? ""}" aria-label="Set worth of ${esc(disp[k] || k)}"></div>`).join("")}</div></div>` : ""}
     <p class="pfoot">Worth each is reckoned from the wiki's set worths, the same way the game does (steel: 3 iron ore at 5 and 2 coal at 3, two made, so 10.5), bench fees included. A good counts at its set worth or your market price for it, whichever is lower, as the game takes the going price when that is lower. The game takes the auction price instead when that is lower, so if the pack card shows less, type its figure over the faint one. Costs you uses your market prices. Past 10 packs sold in 24 hours each pays less (−20% for the next 5, −30% for the 5 after, then half). The sale assumes a fresh pack.</p>`;
+  renderSurplus();
 }
+
+// ---- surplus: is it worth shipping what you have too much of? ----
+// Each pack is paid on its set worth, so one item ships for its worth × the pack's multiplier. A pack only sells
+// once it is full, so a part-filled last pack is either topped up with the pack's best piece or the rest sold at market.
+const SALE_DROP = [[10, 1], [15, 0.8], [20, 0.7], [Infinity, 0.5]];  // the 11th to 15th pack in 24 h pays 20% less, and so on
+const packsPay = (n, each) => { let s = 0; for (let i = 1; i <= n; i++) s += each * SALE_DROP.find(([m]) => i <= m)[1]; return s; };
+packs.sx = { item: "", qty: null, alt: {}, ...(packs.sx || {}) };
+let sxList = null;
+function sxItems() {
+  if (sxList) return sxList;
+  const m = new Map();
+  PACKS.forEach(p => packCandidates(p).forEach(k => m.set(k, (m.get(k) || []).concat(p))));
+  return sxList = m;
+}
+function sxFind(q) {
+  const all = sxItems(), k = K(q || "");
+  if (!k) return { k: null, alts: [] };
+  if (all.has(k)) return { k, alts: [] };
+  const hits = [...all.keys()].filter(x => x.includes(k))
+    .sort((a, b) => a.startsWith(k) === b.startsWith(k) ? a.length - b.length : a.startsWith(k) ? -1 : 1);
+  return { k: hits.length === 1 ? hits[0] : null, alts: hits.slice(0, 10), off: !hits.length && disp[k] ? k : null };
+}
+const sxAlt = k => packs.sx.alt[k] ?? priceOf(k) ?? unit(k).cost;
+function sxPack(p, k, qty, alt) {
+  const w = worthOf(k);
+  if (w.w == null || w.w <= 0) return { p, missing: w.missing };
+  const target = packTarget(p), mult = packMult(p), per = Math.ceil(target / w.w - 1e-9);
+  const full = Math.floor(qty / per), left = qty - full * per, a = alt ?? 0;
+  const best = packRows(p).rows.find(r => r.k !== k);
+  const top = left > 0 && best ? (n => ({ r: best, n, cost: n * best.each }))(Math.ceil((target - left * w.w) / best.w - 1e-9)) : null;
+  const pay1 = packsPay(full, target * mult), g1 = pay1 - full * per * a;
+  // the topped-up pack as a whole (g2), and the part of it your surplus earns (share): only that counts as the surplus's gain,
+  // the filler's own profit is there whether or not you ship the surplus
+  const extra = top ? packsPay(full + 1, target * mult) - pay1 : 0;
+  const g2 = top ? extra - top.cost - left * a : null, share = top ? left * w.w / target * extra - left * a : null;
+  const useTop = g2 != null && g2 > 0 && share > 0;
+  return { p, w: w.w, per, full, left, top, useTop, g2, share, gain: g1 + (useTop ? share : 0), each: w.w * mult, packsN: full + (useTop ? 1 : 0) };
+}
+function renderSurplus() {
+  const out = document.getElementById("psx-out"); if (!out) return;
+  const dl = document.getElementById("psx-list");
+  if (!dl.childElementCount) dl.innerHTML = [...sxItems().keys()].sort().map(k => `<option value="${esc(disp[k])}">`).join("");
+  const f = sxFind(packs.sx.item), altEl = document.getElementById("psx-alt");
+  if (!f.k) {
+    altEl.placeholder = ""; altEl.value = "";
+    const typed = (packs.sx.item || "").trim();
+    out.innerHTML = f.off ? `<p class="empty">No crafter's pack takes ${esc(disp[f.off])}.</p>`
+      : f.alts.length ? `<div class="chips">${f.alts.map(k => `<button type="button" class="chip" data-sx="${esc(k)}">${ico(k, "")}${esc(disp[k])}</button>`).join("")}</div>`
+      : typed ? `<p class="empty">No pack good matches “${esc(typed)}”.</p>` : "";
+    return;
+  }
+  const k = f.k, qty = Math.max(1, Math.floor(packs.sx.qty || 1)), alt = sxAlt(k), d = priceOf(k) ?? unit(k).cost;
+  altEl.placeholder = d != null ? fmt(d) : "?";
+  if (document.activeElement !== altEl) altEl.value = packs.sx.alt[k] ?? "";
+  const res = sxItems().get(k).map(p => sxPack(p, k, qty, alt));
+  const ok = res.filter(r => r.w != null).sort((a, b) => b.gain - a.gain || b.each - a.each), miss = res.filter(r => r.w == null);
+  const name = esc(disp[k]), top = ok[0];
+  const verdict = !top ? ""
+    : alt == null ? `<p class="verdict">Set what ${name} sells for at market to see if shipping pays.</p>`
+    : top.each <= alt ? `<p class="verdict"><b>Sell at market.</b> The best pack pays about ${gr(top.each)} for each ${name}, less than ${gr(alt)} at market.</p>`
+    : top.packsN === 0 ? `<p class="verdict">A pack pays about ${gr(top.each)} each against ${gr(alt)} at market, but ${qty} won't fill one and topping it up loses money. <b>Hold them until you have ${top.per}, or sell at market.</b></p>`
+    : `<p class="verdict"><b>Ship it.</b> The ${esc(top.p.name)} pays about ${gr(top.gain)} more for your ${name} than selling them at ${gr(alt)} each.</p>`;
+  const card = (r, i) => {
+    const pay = packTarget(r.p) * packMult(r.p), other = r.top && esc(disp[r.top.r.k]);
+    const lines = [`One ships for about <b>${gr(r.each)}</b> (worth ${fmt(r.w)} of a ${fmt(packTarget(r.p))} pack)${alt != null ? `, against <b>${gr(alt)}</b> at market` : ""}. A pack takes ${r.per}.`];
+    if (r.full) lines.push(`${r.full * r.per} of yours fill <b>${r.full}</b> pack${r.full > 1 ? "s" : ""}, paid about ${gr(packsPay(r.full, pay))}${r.full > 10 ? " (past 10 packs a day each pays less)" : ""}.`);
+    if (r.left && r.top) lines.push(r.useTop
+      ? `Top up ${r.full ? "one more" : "a"} pack: ${r.left} ${name} plus ${r.top.n} × ${other} (costs you ${gr(r.top.cost)}). That pack clears ${gr(r.g2)}, ${gr(r.share)} of it from your ${name}.`
+      : r.g2 <= 0 ? `${r.full ? `The other ${r.left}` : `Your ${r.left}`} would need ${r.top.n} × ${other} (${gr(r.top.cost)}) to fill a pack, which loses ${gr(-r.g2)}: sell ${r.full ? "them" : "those"} at market.`
+      : `${r.full ? `The other ${r.left}` : `Your ${r.left}`} earn more at market than in a pack: sell ${r.full ? "them" : "those"}.`);
+    else if (r.left && !r.full) lines.push(`Not enough for a pack, and nothing else in it can be reckoned to top it up.`);
+    return `<div class="prec${i ? " weak" : ""}">${ico(k, producers[k] ? "Part" : "")}
+      <div><div class="eyebrow">${esc(r.p.name)} · ${esc(r.p.t)}</div>${lines.map(l => `<div class="pline">${l}</div>`).join("")}</div>
+      ${alt == null ? "" : (g => `<div class="pprofit ${g < 0 ? "neg" : ""}" style="grid-row:1;grid-column:3"><small>vs market</small>${g >= 0 ? "+" : "−"}${fmt(Math.abs(g))}<small>gr</small></div>`)(r.packsN ? r.gain : qty * (r.each - alt))}</div>`;
+  };
+  out.innerHTML = verdict + ok.map(card).join("")
+    + miss.map(r => `<p class="empty">${esc(r.p.name)}: set the pack worth of ${r.missing.map(m => esc(disp[m] || m)).join(", ")} in its tab below first.</p>`).join("")
+    + `<p class="pfoot">Uses the distance, buyer town and route of the day set in the pack tabs below, and counts from a fresh day's sales.</p>`;
+}
+(() => {
+  const box = document.getElementById("psurplus"), it = document.getElementById("psx-item"), q = document.getElementById("psx-qty");
+  it.value = packs.sx.item; q.value = packs.sx.qty ?? "";
+  let t;
+  box.addEventListener("input", e => {
+    e.stopPropagation();  // the pack tabs' own input handler is for the tabs
+    const v = e.target.value.trim(), num = v === "" ? null : Number(v);
+    if (e.target.id === "psx-item") packs.sx.item = e.target.value;
+    else if (e.target.id === "psx-qty") packs.sx.qty = num != null && num > 0 ? num : null;
+    else if (e.target.id === "psx-alt") {
+      const k = sxFind(packs.sx.item).k; if (!k) return;
+      if (num == null || isNaN(num) || num < 0) delete packs.sx.alt[k]; else packs.sx.alt[k] = num;
+    }
+    savePacks(); clearTimeout(t); t = setTimeout(renderSurplus, 150);
+  });
+  box.addEventListener("click", e => {
+    const b = e.target.closest("[data-sx]"); if (!b) return;
+    it.value = packs.sx.item = disp[b.dataset.sx]; savePacks(); renderSurplus(); q.focus();
+  });
+})();
+
 document.getElementById("ptabs").addEventListener("click", e => {
   const b = e.target.closest("[data-ptab]"); if (!b) return;
   packs.tab = b.dataset.ptab; packs.all = false; savePacks(); renderPacks();

@@ -1,8 +1,9 @@
-Recipes brought up to date with the wiki (30 October): 1,259 recipes, up from 1,205.
+New in Trade packs: "Got a surplus?"
 
-- Steel bars are now called steel, as on the wiki and the pack cards. Any price you set for steel bars carries over.
-- Linen is made from 2 flax. Padding, bandages and bowstrings now use linen, and many tailoring pieces no longer need padding.
-- Flax and hemp fibre are new market goods (set worth 6 and 5).
-- 41 new furniture pieces with their pictures: icons, tapestries, lanterns, candles, wreaths, pelts, hearths, the lute and more. Pieces bought only with coin show that cost.
-- Second recipes for bandages, cooked hare, roast chicken leg, crayfish and trout are listed beside the first.
-- Many armour pieces moved levels and changed materials, meat dishes now take two cuts, and several cooked dishes take a side.
+Type an item you have too much of and how many. The ledger lists every crafter's pack that takes it and says whether shipping it pays more than selling it at market:
+- what one ships for, against your market price (you can type a different market price)
+- how many full packs your stock fills, and what they pay
+- whether topping up the last pack with the pack's best item is worth it
+- counts only what your own goods earn, not the profit of the filler
+
+It uses the distance, buyer town and route of the day set in the pack tabs.

@@ -1,9 +1,9 @@
 {
  "app": "groschen-ledger",
- "version": "2026.10.30.1",
+ "version": "2026.10.31.1",
  "minApp": "1.0.0",
- "tag": "data-2026.10.30.1",
- "notes": "Recipes brought up to date with the wiki (30 October): 1,259 recipes, up from 1,205.\n\n- Steel bars are now called steel, as on the wiki and the pack cards. Any price you set for steel bars carries over.\n- Linen is made from 2 flax. Padding, bandages and bowstrings now use linen, and many tailoring pieces no longer need padding.\n- Flax and hemp fibre are new market goods (set worth 6 and 5).\n- 41 new furniture pieces with their pictures: icons, tapestries, lanterns, candles, wreaths, pelts, hearths, the lute and more. Pieces bought only with coin show that cost.\n- Second recipes for bandages, cooked hare, roast chicken leg, crayfish and trout are listed beside the first.\n- Many armour pieces moved levels and changed materials, meat dishes now take two cuts, and several cooked dishes take a side.",
+ "tag": "data-2026.10.31.1",
+ "notes": "New in Trade packs: \"Got a surplus?\"\n\nType an item you have too much of and how many. The ledger lists every crafter's pack that takes it and says whether shipping it pays more than selling it at market:\n- what one ships for, against your market price (you can type a different market price)\n- how many full packs your stock fills, and what they pay\n- whether topping up the last pack with the pack's best item is worth it\n- counts only what your own goods earn, not the profit of the filler\n\nIt uses the distance, buyer town and route of the day set in the pack tabs.",
  "files": [
   {
    "path": "assets/decor.webp",
@@ -98,7 +98,7 @@
   {
    "path": "index.html",
    "asset": "index.html",
-   "sha256": "efaed68a7f1adeeb32af647951fa9b3e6645403c4747e22792fb167aec0ef2aa"
+   "sha256": "aa2793badab500a53333529aa16695e3093b03f3d5213100e5a486049e9d5c36"
   }
  ]
 }
