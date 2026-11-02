@@ -1,9 +1,9 @@
 {
  "app": "groschen-ledger",
- "version": "2026.10.31.1",
+ "version": "2026.11.02.1",
  "minApp": "1.0.0",
- "tag": "data-2026.10.31.1",
- "notes": "New in Trade packs: \"Got a surplus?\"\n\nType an item you have too much of and how many. The ledger lists every crafter's pack that takes it and says whether shipping it pays more than selling it at market:\n- what one ships for, against your market price (you can type a different market price)\n- how many full packs your stock fills, and what they pay\n- whether topping up the last pack with the pack's best item is worth it\n- counts only what your own goods earn, not the profit of the filler\n\nIt uses the distance, buyer town and route of the day set in the pack tabs.",
+ "tag": "data-2026.11.02.1",
+ "notes": "Trade packs: pick towns instead of typing kilometres\n\nThe pack tabs now ask where the pack is packed and where you sell it (Suchdol, Kuttenberg, Bylany, Grund, Miskowitz, Pschitoky, Raborsch). The ledger works out the distance between the two convoy masters by itself, for example Suchdol to Kuttenberg is 3.3 km.\n- choose \"Other place (type km)\" in either box to type a distance yourself\n- a pair closer than 1.5 km is flagged, since the convoy master won't take it\n- the \"Got a surplus?\" box uses the same towns",
  "files": [
   {
    "path": "assets/decor.webp",
@@ -98,7 +98,7 @@
   {
    "path": "index.html",
    "asset": "index.html",
-   "sha256": "aa2793badab500a53333529aa16695e3093b03f3d5213100e5a486049e9d5c36"
+   "sha256": "857e2a9c95c6ee25cb9e4be5faf2e818f83673604224f2c1c69da841d32de03d"
   }
  ]
 }

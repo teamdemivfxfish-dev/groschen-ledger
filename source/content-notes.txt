@@ -1,9 +1,6 @@
-New in Trade packs: "Got a surplus?"
+Trade packs: pick towns instead of typing kilometres
 
-Type an item you have too much of and how many. The ledger lists every crafter's pack that takes it and says whether shipping it pays more than selling it at market:
-- what one ships for, against your market price (you can type a different market price)
-- how many full packs your stock fills, and what they pay
-- whether topping up the last pack with the pack's best item is worth it
-- counts only what your own goods earn, not the profit of the filler
-
-It uses the distance, buyer town and route of the day set in the pack tabs.
+The pack tabs now ask where the pack is packed and where you sell it (Suchdol, Kuttenberg, Bylany, Grund, Miskowitz, Pschitoky, Raborsch). The ledger works out the distance between the two convoy masters by itself, for example Suchdol to Kuttenberg is 3.3 km.
+- choose "Other place (type km)" in either box to type a distance yourself
+- a pair closer than 1.5 km is flagged, since the convoy master won't take it
+- the "Got a surplus?" box uses the same towns
